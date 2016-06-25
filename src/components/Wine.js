@@ -42,8 +42,8 @@ export default class Wine extends Component {
     const { wine } = this.props;
     return (
       <View style={styles.bordered}>
-        <View style={styles.box}>
-          <Text style={styles.wine_desc} >{ wine.wine_name } ({ wine.vintage })</Text>
+        <View style={styles.box} testID={`wineTxt.wine.wineId`}>
+          <Text style={styles.wine_desc}>{ wine.wine_name } ({ wine.vintage })</Text>
           { this.showLabel() }
         </View>
       </View>

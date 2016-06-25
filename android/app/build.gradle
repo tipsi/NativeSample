@@ -78,7 +78,11 @@ def enableProguardInReleaseBuilds = false
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "24.0.0"
+
+    lintOptions {
+        abortOnError false
+    }
 
     defaultConfig {
         applicationId "com.nativesample"
@@ -89,6 +93,7 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
     splits {
         abi {
@@ -129,10 +134,48 @@ android {
     }
 }
 
+/* how to force */
+configurations.all {
+    resolutionStrategy {
+        force 'com.google.code.findbugs:jsr305:3.0.0'
+        force 'com.android.support:appcompat-v7:23.4.0'
+        force 'com.android.support:recyclerview-v7:23.4.0'
+        force 'com.android.support:support-v4:23.4.0'
+    }
+}
+
+
 dependencies {
+    // https://stackoverflow.com/questions/37500225/android-conflict-with-dependency-appcompat
+    ext {
+        supportLibVersion = '23.4.0'
+        espressoVersion = '2.2.2'
+    }
+
     compile fileTree(dir: "libs", include: ["*.jar"])
-    compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
+
+    compile "com.android.support:appcompat-v7:$supportLibVersion"
+    compile "com.android.support:design:$supportLibVersion"
+    compile "com.android.support:recyclerview-v7:$supportLibVersion"
+
+
+
+    testCompile 'junit:junit:4.12'
+    
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
+
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile "com.android.support.test.espresso:espresso-core:$espressoVersion"
+    androidTestCompile ("com.android.support.test.espresso:espresso-contrib:$espressoVersion") {
+        exclude module: 'recyclerview-v7'
+        exclude module: 'design'
+    }
+    androidTestCompile "com.android.support.test.espresso:espresso-web:$espressoVersion"
+    androidTestCompile "com.android.support.test.espresso:espresso-idling-resource:$espressoVersion"
+    androidTestCompile "com.android.support:support-annotations:$supportLibVersion"
+
 }
 
 // Run this once to be able to run the application with BUCK

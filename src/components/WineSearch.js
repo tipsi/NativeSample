@@ -30,8 +30,8 @@ export default class WineSearch extends Component {
 
   render() {
     return (
-      <ScrollView>
-          <TextInput onSubmitEditing={this.onSubmit}/>
+      <ScrollView testID="mainView">
+          <TextInput testID="searchInput" id="thisisid" onSubmitEditing={this.onSubmit} accessibilityLabel="searchInputAcc"/>
           { this.state.result.map( wine => <Wine key={wine.wineId} wine={wine} />) }
       </ScrollView>
     );
